@@ -1,4 +1,4 @@
-# TDgalore
+# NFL
 
 Sample NFL project to test hypothesis that the NFL has become more "offensive" over the last 7 years. 
 
