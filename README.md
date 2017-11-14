@@ -6,6 +6,7 @@ Will initially just test by trending total points of each week (1-17) and compar
 the data intertemporally (2009-2016)
 
 # Packages used
+* numpy
 * pandas
 * matplotlib
 
