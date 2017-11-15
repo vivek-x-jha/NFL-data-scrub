@@ -1,25 +1,23 @@
 # This file is for importing, cleaning, and preparing the data for analysis
 import pandas as pd
-import numpy as np
 
-# Reads in the CSV's as play-by-play dataframes classified by season (2009 - 2017)
-pbp_folder = 'nflscrapR-data/data/season_play_by_play/pbp_'
-pbp_csv_datasets = {year: f'{pbp_folder}{year}.csv' for year in range(2009, 2018)}
+# Reads in the CSV's as play-by-play dataframes classified by season
 
-pbp2009 = pd.read_csv(pbp_csv_datasets[2009])
-pbp2010 = pd.read_csv(pbp_csv_datasets[2010])
-pbp2011 = pd.read_csv(pbp_csv_datasets[2011])
-pbp2012 = pd.read_csv(pbp_csv_datasets[2012])
-pbp2013 = pd.read_csv(pbp_csv_datasets[2013])
-pbp2014 = pd.read_csv(pbp_csv_datasets[2014])
-pbp2015 = pd.read_csv(pbp_csv_datasets[2015])
-pbp2016 = pd.read_csv(pbp_csv_datasets[2016])
-pbp2017 = pd.read_csv(pbp_csv_datasets[2017])
+period = range(2009, 2018)  # '09 season - '17 season
+pbp_csv_PATH = 'nflscrapR-data/data/season_play_by_play/'
 
-datasets = [pbp2009, pbp2010, pbp2011, pbp2012, pbp2013, pbp2014, pbp2015, pbp2016, pbp2017]
+# Dictionary containing paths of play-by-play csv files
+## dict pbp_csv_DIRECTORY[<int season>] -> str 'nflscrapR-data/data/season_play_by_play/pbp_<season>.csv'
+pbp_csv_DIRECTORY = {season: f'{pbp_csv_PATH}pbp_{season}.csv' for season in period}
 
-# Checks if datasets have same number of columns
-columns = [pbpYEAR.shape[1] for pbpYEAR in datasets]
+# Dictionary containing play-by-play data as DataFrames
+## dict pbp_dataframes[<int season>] -> dataframe_obj pbp_<season>
+pbp_dataframes = {season: pd.read_csv(file) for season, file in pbp_csv_DIRECTORY.items()}
+
+# Checks if pbp_dataframes have same number of columns
+columns = [pbp_df.shape[1] for season, pbp_df in pbp_dataframes.items()]
+# columns = [pbp_dataframes[season].shape[1] for season in pbp_dataframes]
+
 assert min(columns) == max(columns)
 
 # print(pbp201.info())
