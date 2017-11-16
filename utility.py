@@ -11,25 +11,10 @@ def abspaths_data(data_dir):
 	"""
 	abspath_proj_dir = os.path.dirname(os.path.abspath(__file__))
 	abspath_data_dir = os.path.join(abspath_proj_dir, data_dir)
-	abspaths_data_files = (os.path.join(abspath_data_dir, data) for data in os.listdir(abspath_data_dir))
+	data_folder = sorted(os.listdir(abspath_data_dir))
+	abspaths_data_files = (os.path.join(abspath_data_dir, data) for data in data_folder)
 
 	return abspaths_data_files
-
-
-def testRowColumnSizes(rows_list, columns_list, dimensions_list):
-	"""
-	Used to assert that given rows_list/columns_list have same shape as dimensions_list
-	:param rows_list: (sequence-type of ints) elements represent # of rowSizes for a collection of dataframes
-	:param columns_list: (sequence-type of ints) elements represent # of columnSizes for a collection of dataframes
-	:param dimensions_list: (sequence-type of ordered pairs) elements represent dimensions/shape for a collection of dataframes
-	:return: bool
-	"""
-	d_list = zip(rows_list, columns_list)
-	for dim1, dim2 in zip(d_list, dimensions_list):
-		if dim1 != dim2:
-			return False
-
-	return True
 
 
 def isEqualNumberOfColumns(columns_list):
@@ -43,7 +28,7 @@ def isEqualNumberOfColumns(columns_list):
 	return isEqual
 
 
-def testMergeDimensions(rows_list, columns_list, mergedDataframe):
+def isEqualMergeDimensions(rows_list, columns_list, mergedDataframe):
 	"""
 	Used to assert that merged dataframe has correct dimensions
 	:param rows_list: (sequence-type of ints) elements represent # of rowSizes for a collection of dataframes
@@ -56,4 +41,3 @@ def testMergeDimensions(rows_list, columns_list, mergedDataframe):
 	isEqual = mergedDataframe.shape == correctDimensions
 
 	return isEqual
-
