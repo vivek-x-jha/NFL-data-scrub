@@ -1,7 +1,8 @@
 # This file is for importing, cleaning, and preparing the data for analysis
 import numpy as np
 import pandas as pd
-from utility import abspaths_data, dimensionsEqual
+from utility import abspaths_data
+from utility import isEqualNumberOfColumns, testRowColumnSizes, testMergeDimensions
 
 """Loading the data"""
 
@@ -24,19 +25,19 @@ df_metadata = lambda season: pbp_dataframes[season].info(verbose=False)
 # print(df_metadata(2011))
 
 dimensions = [pbp_df.shape for pbp_df in pbp_dataframes.values()]
-rows = [shape[0] for shape in dimensions]
-columns = [shape[1] for shape in dimensions]
 
-# Checks if `rows` and `columns` were calculated properly
-assert dimensionsEqual(rows, columns, dimensions)
+# Contains the respective number of rows/columns for each dataframe
+rowSizes = [shape[0] for shape in dimensions]
+columnSizes = [shape[1] for shape in dimensions]
 
-# Checks if each season's dataset have same number of features
-assert min(columns) == max(columns)
+# Checks if `rowSizes` and `columnSizes` were calculated properly
+assert testRowColumnSizes(rowSizes, columnSizes, dimensions)
+
+# Checks if all datasets have same number of features
+assert isEqualNumberOfColumns(columnSizes)
 
 """Merge data vertically by season"""
 
 pbp_merged = pd.concat(pbp_dataframes.values())
-assert pbp_merged.shape[0] == sum(rows)
-assert pbp_merged.shape[1] == columns[np.random.randint(len(columns))]
-
-print(pbp_merged.info(verbose=False))
+# print(pbp_merged.info(verbose=False))
+assert testMergeDimensions(rowSizes, columnSizes, pbp_merged)
