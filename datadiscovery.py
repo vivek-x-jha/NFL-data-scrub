@@ -1,5 +1,4 @@
 # This file is for importing, cleaning, and preparing the data for analysis
-import numpy as np
 import pandas as pd
 from utility import abspaths_data
 from utility import isEqualNumberOfColumns, testRowColumnSizes, testMergeDimensions
