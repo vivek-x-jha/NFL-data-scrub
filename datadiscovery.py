@@ -1,7 +1,7 @@
 # This file is for importing, cleaning, and preparing the data for analysis
 import numpy as np
 import pandas as pd
-from utility import abspaths_data
+from utility import abspaths_data, dimensionsEqual
 
 """Loading the data"""
 
@@ -11,8 +11,6 @@ period = range(2009, 2018)
 abspaths_data_files = abspaths_data('nflscrapR-data/season_play_by_play/')
 
 # Load data as Dictionary: values are play-by-play Dataframes (keyed by season)
-# User on StackOverflow warned about storing dataframes in dictionaries???
-# Seems ok for now...but will keep this in mind as project/data grows
 pbp_dataframes = {season: pd.read_csv(file) for season, file in zip(period, abspaths_data_files)}
 
 """Data Inspection"""
@@ -21,13 +19,16 @@ pbp_dataframes = {season: pd.read_csv(file) for season, file in zip(period, absp
 df_metadata = lambda season: pbp_dataframes[season].info(verbose=False)
 
 # TODO inspect why 2011 season only has 23414 values (all other seasons have 44K-45K plays)
-#  Could the 2017 (current/unfinished) season be falsely tagged as 2011 season?
+# Could the 2017 (current/unfinished) season be falsely tagged as 2011 season?
 # If so, we need to check key-value pairs of `pbp_dataframes` are correct
-print(df_metadata(2011)) 
+# print(df_metadata(2011))
 
 dimensions = [pbp_df.shape for pbp_df in pbp_dataframes.values()]
 rows = [shape[0] for shape in dimensions]
 columns = [shape[1] for shape in dimensions]
+
+# Checks if `rows` and `columns` were calculated properly
+assert dimensionsEqual(rows, columns, dimensions)
 
 # Checks if each season's dataset have same number of features
 assert min(columns) == max(columns)
