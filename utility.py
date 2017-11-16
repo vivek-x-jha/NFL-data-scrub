@@ -53,7 +53,7 @@ def testMergeDimensions(rows_list, columns_list, mergedDataframe):
 	"""
 	rand_column_size = columns_list[np.random.randint(len(columns_list))]
 	correctDimensions = sum(rows_list), rand_column_size
-	isCorrect = mergedDataframe.shape == correctDimensions
+	isEqual = mergedDataframe.shape == correctDimensions
 
-	return isCorrect
+	return isEqual
 
