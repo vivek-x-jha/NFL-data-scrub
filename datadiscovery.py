@@ -1,7 +1,8 @@
 # This file is for importing, cleaning, and preparing the data for analysis
+import numpy as np
 import pandas as pd
 from utility import abspaths_data
-from utility import isEqualNumberOfColumns, testRowColumnSizes, testMergeDimensions
+from utility import isEqualNumberOfColumns, isEqualMergeDimensions
 
 """Loading the data"""
 
@@ -18,19 +19,13 @@ pbp_dataframes = {season: pd.read_csv(file) for season, file in zip(period, absp
 # Can view the metadata of each season by passing the year into `df_metadata`
 df_metadata = lambda season: pbp_dataframes[season].info(verbose=False)
 
-# TODO inspect why 2011 season only has 23414 values (all other seasons have 44K-45K plays)
-# Could the 2017 (current/unfinished) season be falsely tagged as 2011 season?
-# If so, we need to check key-value pairs of `pbp_dataframes` are correct
-# print(df_metadata(2011))
-
 dimensions = [pbp_df.shape for pbp_df in pbp_dataframes.values()]
 
 # Contains the respective number of rows/columns for each dataframe
 rowSizes = [shape[0] for shape in dimensions]
-columnSizes = [shape[1] for shape in dimensions]
+avg_plays_per_game = np.mean(rowSizes) / 32 / 17
 
-# Checks if `rowSizes` and `columnSizes` were calculated properly
-assert testRowColumnSizes(rowSizes, columnSizes, dimensions)
+columnSizes = [shape[1] for shape in dimensions]
 
 # Checks if all datasets have same number of features
 assert isEqualNumberOfColumns(columnSizes)
@@ -39,4 +34,4 @@ assert isEqualNumberOfColumns(columnSizes)
 
 pbp_merged = pd.concat(pbp_dataframes.values())
 # print(pbp_merged.info(verbose=False))
-assert testMergeDimensions(rowSizes, columnSizes, pbp_merged)
+assert isEqualMergeDimensions(rowSizes, columnSizes, pbp_merged)
