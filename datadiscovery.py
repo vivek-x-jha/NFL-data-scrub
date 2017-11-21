@@ -12,12 +12,12 @@ period = range(2009, 2018)
 abspaths_data_files = abspaths_data('nflscrapR-data/season_play_by_play/')
 
 # Load data as Dictionary: values are play-by-play Dataframes (keyed by season)
-pbp_dataframes = {season: pd.read_csv(file) for season, file in zip(period, abspaths_data_files)}
+pbp_dataframes = {season: pd.read_csv(file, low_memory=False) for season, file in zip(period, abspaths_data_files)}
 
 """Data Inspection"""
 
 # Can view the metadata of each season by passing the year into `df_metadata`
-df_metadata = lambda season: pbp_dataframes[season].info(verbose=False)
+pbp_metadata = lambda season: pbp_dataframes[season].info(verbose=False)
 
 dimensions = [pbp_df.shape for pbp_df in pbp_dataframes.values()]
 
